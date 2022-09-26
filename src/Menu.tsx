@@ -1,19 +1,24 @@
 import { foods } from "./food";
+import Heading from "./shared/Heading";
 
 const Menu = () => {
   return (
     <div className="flex flex-wrap ">
+      <Heading level={2} children="Come check us out!"></Heading>
       {foods.map((food) => {
         return (
-          <div className="p-2 shadow-lg border shadow-cyan-500/50 text-center max-w-sm m-7 rounded basis-1/2 cursor-pointer hover:bg-sky-700 hover:text-white">
+          <div
+            key={food.name}
+            className="p-2 shadow-lg border shadow-cyan-500/50 text-center max-w-sm m-7 rounded basis-1/2 cursor-pointer hover:bg-sky-700 hover:text-white"
+          >
             <div className="">
               <img
-                className="h-52 w-full "
+                className="h-52 w-full object-cover"
                 src={"./images/" + food.image}
                 alt={food.name}
               />
             </div>
-            <h2 className="p-4 font-bold">{food.name}</h2>
+            <Heading level={5}>{food.name}</Heading>
             <p>{food.description}</p>
             <p className="p-2 font-bold self-end">${food.price}</p>
           </div>

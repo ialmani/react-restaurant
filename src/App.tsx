@@ -8,7 +8,7 @@ export default function App() {
   return (
     <>
       <nav className="bg-cyan-800 font-bold ">
-        <ul className=" flex flex-center justify-center p-4 text-white  ">
+        <ul className=" flex flex-center justify-center p-4 text-white font-mono">
           <li className="p-2 text-white cursor-pointer hover:bg-cyan-600">
             <Link to="/">Home </Link>
           </li>
