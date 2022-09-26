@@ -1,15 +1,16 @@
 type InputProps = {
   label: string;
   id: string;
+  type?: "text" | "number" | "email" | "password" | "tel";
 };
 
-const Input = (prop: InputProps) => {
+const Input = ({ label, id, type }: InputProps) => {
   return (
     <>
-      <label htmlFor={prop.id} className="font-mono">
-        {prop.label}
+      <label htmlFor={id} className="font-mono max-w-xl min-w-maxl">
+        {label}
       </label>
-      <input id={prop.id} type="text" className="border-2 ml-2" />
+      <input id={id} type={type} className="border-2 ml-2 mb-5 " />
     </>
   );
 };
