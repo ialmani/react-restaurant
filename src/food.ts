@@ -1,4 +1,5 @@
 export type Food = {
+  id: number;
   name: string;
   image: string;
   price: number;
@@ -19,6 +20,8 @@ export const foodTags = [
 ] as const;
 
 export type FoodTag = typeof foodTags[number];
+
+export type NewFood = Omit<Food, "id">;
 
 export const foods: Array<Food> = [
   {

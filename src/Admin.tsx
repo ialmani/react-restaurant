@@ -2,11 +2,11 @@ import Input from "./shared/Input";
 import Heading from "./shared/Heading";
 import Button from "./shared/Button";
 import CheckboxList from "./shared/CheckboxList";
-import { Food, foodTags } from "./food";
+import { Food, foodTags, NewFood } from "./food";
 import Checkbox from "./shared/Checkbox";
 import React, { useEffect, useState } from "react";
 
-const emptyFood: Food = {
+const emptyFood: NewFood = {
   name: "",
   image: "",
   price: 0,
@@ -16,21 +16,22 @@ const emptyFood: Food = {
 
 const Admin = () => {
   const [food, setFood] = useState(emptyFood);
-  // const [isChecked, setIsChecked] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     //currentFood-prevFood: react injects the current state value when a function is passed to setState
     setFood((currentFood) => ({ ...currentFood, [id]: value })); //computed property syntax - [id]: value = change a property using a string as id
   };
-  // debugger;
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
   return (
     <>
       <div className="">
         <Heading level={2} children="Login"></Heading>
 
-        <form className="flex flex-col mt-5 max-w-sm">
+        <form onSubmit={handleSubmit} className="flex flex-col mt-5 max-w-sm">
           <Input
             type="text"
             id="name"

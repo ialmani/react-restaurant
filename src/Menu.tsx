@@ -1,7 +1,19 @@
-import { foods } from "./food";
+import { useEffect, useState } from "react";
+import { Food, foods } from "./food";
+import { getFoods } from "./services/foodsApi";
 import Heading from "./shared/Heading";
 
 const Menu = () => {
+  const [foods, setFoods] = useState<Food[]>([]);
+
+  useEffect(() => {
+    async function fetchFoods() {
+      const foods = await getFoods();
+      setFoods(foods);
+    }
+    fetchFoods();
+  }, []);
+
   return (
     <div className="flex flex-wrap ">
       <Heading level={2} children="Come check us out!"></Heading>
