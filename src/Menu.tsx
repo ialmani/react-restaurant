@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Food, foods } from "./food";
+import { Food } from "./food";
 import { getFoods } from "./services/foodsApi";
 import Heading from "./shared/Heading";
 

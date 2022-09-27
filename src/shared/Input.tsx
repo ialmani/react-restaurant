@@ -8,10 +8,11 @@ type InputProps = {
   classname?: string;
   value?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void; //you could use any
+  error?: string;
 };
 const checkboxValue = {};
 
-const Input = ({ label, id, type, value, onChange }: InputProps) => {
+const Input = ({ label, id, type, value, onChange, error }: InputProps) => {
   return (
     <>
       <label htmlFor={id} className="font-mono ml-3 ">

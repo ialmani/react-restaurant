@@ -5,6 +5,8 @@ import CheckboxList from "./shared/CheckboxList";
 import { Food, foodTags, NewFood } from "./food";
 import Checkbox from "./shared/Checkbox";
 import React, { useEffect, useState } from "react";
+import { addFood } from "./services/foodsApi";
+import toast from "react-hot-toast";
 
 const emptyFood: NewFood = {
   name: "",
@@ -14,8 +16,17 @@ const emptyFood: NewFood = {
   tags: [],
 };
 
+export type Errors = {
+  name?: string;
+  image?: string;
+  price?: string;
+  description?: string;
+  tags?: string;
+};
+
 const Admin = () => {
   const [food, setFood] = useState(emptyFood);
+  const [errors, setErrors] = useState<Errors>({});
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
@@ -23,9 +34,36 @@ const Admin = () => {
     setFood((currentFood) => ({ ...currentFood, [id]: value })); //computed property syntax - [id]: value = change a property using a string as id
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const validate = () => {
+    const newErrors: Errors = {};
+    if (!food.name) {
+      newErrors.name = "Name is required";
+    }
+    if (!food.image) {
+      newErrors.image = "Image is required";
+    }
+    if (!food.price) {
+      newErrors.price = "Price is required";
+    }
+    if (!food.description) {
+      newErrors.description = "Description is required";
+    }
+    if (food.tags.length === 0) {
+      newErrors.tags = "At least one tag is required";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const isValid = validate();
+    if (!isValid) return;
+    await addFood(food);
+    toast.success("Food Added!");
+    setFood(emptyFood);
+  };
+
   return (
     <>
       <div className="">
@@ -67,11 +105,6 @@ const Admin = () => {
                 label={tag}
                 checked={food.tags.includes(tag)}
                 onChange={(e) => {
-                  // if (isChecked === true) {
-                  //   setFood({ ...food, [e.target.name]: "" });
-                  // } else {
-                  //   setFood({ ...food, [e.target.id]: e.target.value });
-                  // }
                   setFood((currentFood) => {
                     const { checked } = e.target;
                     const tags = checked
