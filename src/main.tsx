@@ -5,6 +5,7 @@ import App from "./App";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  //strict mode will make react render twice
   <React.StrictMode>
     <BrowserRouter>
       <App />

@@ -15,7 +15,6 @@ const Heading = (props: HeadingProps) => {
   const Tag = `h${props.level}` as keyof JSX.IntrinsicElements;
   return (
     <>
-      {/* <div className="flex justify-center text-center mt-2 w-full"> */}
       <Tag
         className={`font-bold font-mono ${
           sizeMap[props.level]
@@ -23,7 +22,6 @@ const Heading = (props: HeadingProps) => {
       >
         {props.children}
       </Tag>
-      {/* </div> */}
     </>
   );
 };
