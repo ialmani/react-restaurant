@@ -1,17 +1,17 @@
-import Button from "./Button";
+import * as stories from "./Button.stories";
+import { composeStories } from "@storybook/testing-react";
 import { render, screen } from "@testing-library/react";
+import Button from "./Button";
+
+const { Primary } = composeStories(stories);
 
 describe("Button", () => {
   it("should render children", () => {
-    const { getByRole } = render(
-      <Button type="button" variant="primary">
-        Click me
-      </Button>
-    );
+    const { getByRole } = render(<Primary />);
     getByRole("button", { name: "Click me" });
   });
 
-  it("should set a custom css class", () => {
+  it("should set a custom CSS class", () => {
     const { getByRole } = render(
       <Button type="button" variant="primary" classname="my-class">
         Click me
@@ -32,15 +32,14 @@ describe("Button", () => {
     );
   });
 
-  it("should apply the proper styles for a variant"),
-    () => {
-      const { getByRole } = render(
-        <Button type="submit" variant="primary">
-          Click me
-        </Button>
-      );
-      expect(screen.getByRole("button", { name: "Click me" })).toHaveClass(
-        "bg-cyan-800 text-white w-24 mt-2 cursor-pointer hover:bg-cyan-700 p-2 rounded"
-      );
-    };
+  it("should apply the proper styles for a variant", () => {
+    render(
+      <Button type="button" variant="primary">
+        Click me
+      </Button>
+    );
+    expect(screen.getByRole("button", { name: "Click me" })).toHaveClass(
+      "bg-cyan-800 text-white w-24 mt-2 cursor-pointer hover:bg-cyan-700 p-2 rounded"
+    );
+  });
 });
