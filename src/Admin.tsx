@@ -24,15 +24,20 @@ export type Errors = {
   tags?: string;
 };
 
+export type Touched = {
+  name?: boolean;
+  image?: boolean;
+  price?: boolean;
+  description?: boolean;
+  tags?: boolean;
+};
+
+type FormStatus = "idle" | "submitting" | "submitted" | "error";
+
 const Admin = () => {
   const [food, setFood] = useState(emptyFood);
-  const [errors, setErrors] = useState<Errors>({});
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = event.target;
-    //currentFood-prevFood: react injects the current state value when a function is passed to setState
-    setFood((currentFood) => ({ ...currentFood, [id]: value })); //computed property syntax - [id]: value = change a property using a string as id
-  };
+  const [touched, setTouched] = useState<Touched>({});
+  const [status, setStatus] = useState<FormStatus>("idle");
 
   const validate = () => {
     const newErrors: Errors = {};
@@ -51,17 +56,40 @@ const Admin = () => {
     if (food.tags.length === 0) {
       newErrors.tags = "At least one tag is required";
     }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+
+    return newErrors;
+  };
+  const errors = validate();
+  const isValid = Object.keys(errors).length === 0;
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = event.target;
+    //currentFood-prevFood: react injects the current state value when a function is passed to setState
+    setFood((currentFood) => ({ ...currentFood, [id]: value })); //computed property syntax - [id]: value = change a property using a string as id
+  };
+
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    const { id } = event.target;
+    setTouched((currentTouched) => ({ ...currentTouched, [id]: true }));
+  };
+
+  const handleError = (id: keyof Errors) => {
+    return status === "submitted" || touched[id] ? errors[id] : "";
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const isValid = validate();
-    if (!isValid) return;
+    window.scroll(0, 0);
+    setStatus("submitting");
+    if (!isValid) {
+      setStatus("submitted");
+      return;
+    }
     await addFood(food);
     toast.success("Food Added!");
+    setStatus("idle");
     setFood(emptyFood);
+    setTouched({});
   };
 
   return (
@@ -76,6 +104,8 @@ const Admin = () => {
             label="Name"
             value={food.name}
             onChange={handleInputChange}
+            error={handleError("name")}
+            onBlur={handleBlur}
           />
           <Input
             type="text"
@@ -83,6 +113,8 @@ const Admin = () => {
             label="Description"
             value={food.description}
             onChange={handleInputChange}
+            onBlur={handleBlur}
+            error={handleError("description")}
           />
           <Input
             type="number"
@@ -90,14 +122,18 @@ const Admin = () => {
             label="Price"
             onChange={handleInputChange}
             value={food.price.toString()}
+            onBlur={handleBlur}
+            error={handleError("price")}
           />
           <Input
             id="image"
             label="Image filename"
             onChange={handleInputChange}
             value={food.image}
+            error={handleError("image")}
+            onBlur={handleBlur}
           />
-          <CheckboxList label="Tags">
+          <CheckboxList label="Tags" error={handleError("tags")}>
             {foodTags.map((tag) => (
               <Checkbox
                 key={tag}
