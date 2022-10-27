@@ -73,24 +73,36 @@ const Admin = () => {
     setTouched((currentTouched) => ({ ...currentTouched, [id]: true }));
   };
 
-  const handleError = (id: keyof Errors) => {
-    return status === "submitted" || touched[id] ? errors[id] : "";
-  };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    window.scroll(0, 0);
-    setStatus("submitting");
+    window.scrollTo(0, 0);
+    // If someone already has clicked submit, don't run this again.
+    // Yes, we could delete the button, but this is nicer for accessibility.
+    if (status === "submitting") return;
+
     if (!isValid) {
       setStatus("submitted");
       return;
     }
-    await addFood(food);
-    toast.success("Food Added!");
+
+    try {
+      await addFood(food);
+    } catch (err) {
+      setStatus("error");
+      return;
+    }
+    toast.success("Food added! 🍔");
     setStatus("idle");
     setFood(emptyFood);
     setTouched({});
   };
+  const handleError = (id: keyof Errors) => {
+    return status === "submitted" || touched[id] ? errors[id] : "";
+  };
+
+  if (status === "error") {
+    throw new Error("Something went wrong");
+  }
 
   return (
     <>

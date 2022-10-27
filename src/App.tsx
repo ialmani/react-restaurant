@@ -1,7 +1,8 @@
+import { ErrorBoundary } from "react-error-boundary";
 import { Routes, Route, Link } from "react-router-dom";
 import Admin from "./Admin";
-import { foods } from "./food";
 import Menu from "./Menu";
+import ErrorFallback from "./shared/ErrorFallback";
 
 export default function App() {
   // const  burger = foods[0];
@@ -20,8 +21,23 @@ export default function App() {
       </nav>
 
       <Routes>
-        <Route path="/" element={<Menu />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route
+          path="/"
+          element={
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Menu />
+            </ErrorBoundary>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Admin />
+            </ErrorBoundary>
+          }
+        />
       </Routes>
     </>
   );

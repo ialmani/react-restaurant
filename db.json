@@ -256,6 +256,26 @@
         "Breakfast"
       ],
       "id": 24
+    },
+    {
+      "name": "Chai",
+      "image": "tea",
+      "price": "2",
+      "description": "tea",
+      "tags": [
+        "Breakfast"
+      ],
+      "id": 25
+    },
+    {
+      "name": "Milk",
+      "image": "milk",
+      "price": "2",
+      "description": "milk",
+      "tags": [
+        "Breakfast"
+      ],
+      "id": 26
     }
   ]
 }
